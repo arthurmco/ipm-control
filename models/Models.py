@@ -1,8 +1,8 @@
 from Database import Database
 """ Model interfaces for every database object here """
 
+db = Database.database.db
 
-db = Database.database
 class MClient(db.Model):
     """ Model interface for the client """
 
@@ -13,9 +13,11 @@ class MClient(db.Model):
     client_license_pri = db.Column(db.Binary(2048))
 
     
-    def __init__(self, name, license_file):
+    def __init__(self, name, license_file, license_pub, license_pri):
         self.client_name = name
         self.client_license_file = license_file
+        self.client_license_pub = license_pub
+        self.client_license_pri = license_pri
 
     def __repr__(self):
         return '<Client %r>' % self.client_name
