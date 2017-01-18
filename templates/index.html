@@ -1,0 +1,26 @@
+<!DOCTYPE html5>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>IPM - International Punishment Machines</title>
+  </head>
+  <body>
+    <div id="navbar">
+      <h4 style="display: inline">Área para funcionários</h4>
+      <div id="login">
+	<form action=" {{ url_for('do_login') }} " method="post">
+	  <input type="text" name="username" placeholder="Usuário" />
+	  <input type="password" name="password" placeholder="Senha" />
+	  <input type="submit" value="Login" />
+	</form>
+      </div>
+    </div>
+    <article>
+      <h1> International Punishment Machines </h1>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed malesuada velit. Proin hendrerit at odio sit amet pretium. Sed accumsan ante iaculis neque congue, sit amet congue turpis tempor. Nunc rutrum eu erat ac dapibus. Nullam volutpat viverra ante, vel dictum velit pharetra ut. Nunc nec nunc quam. Fusce sollicitudin eleifend nibh, sed accumsan felis egestas quis. Nullam lectus nibh, feugiat a diam a, dictum rhoncus dolor. Nullam ipsum ex, suscipit sit amet venenatis vel, pellentesque a odio. Vivamus quis pretium nunc, vel semper mauris. Etiam dignissim urna eget facilisis aliquam. Aliquam erat volutpat. Duis sapien turpis, porta at dapibus in, dictum at erat. Nunc ullamcorper, ante volutpat eleifend molestie, nisl nisl iaculis magna, sit amet pretium massa ex sed purus. Maecenas ornare erat eu accumsan aliquet.</p>
+
+      <p>Sed dignissim porta mauris vitae porta. Ut tincidunt, elit in tristique ultricies, leo ligula dapibus elit, non lacinia orci magna in risus. Proin sit amet elit tincidunt, facilisis ante a, imperdiet sem. Duis sodales porta mi, et ultrices nisl cursus sed. Sed suscipit nisi nec eros ornare, quis porta quam sollicitudin. Donec vulputate orci at laoreet viverra. Maecenas varius ultricies felis sed volutpat. Cras id est scelerisque, finibus justo et, molestie purus. Proin sed lacus nisl. Vivamus vitae elit ex.</p>
+
+    </article>
+  </body>
+</html>
