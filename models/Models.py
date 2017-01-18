@@ -1,6 +1,7 @@
+from flask_sqlalchemy import SQLAlchemy
 from Database import Database
-""" Model interfaces for every database object here """
 
+""" Model interfaces for every database object here """
 db = Database.database.db
 
 class MClient(db.Model):
@@ -81,3 +82,6 @@ class MEmployeeTime(db.Model):
 
     def __repr__(self):
         return '<Employee Time %r (%r %r)>' % self.employee_id, self.employee_time_login, self.employee_time_logout
+
+    
+

@@ -5,13 +5,16 @@
 """
 
 from flask import Flask, url_for, request, abort
-from models.Database import Database
-from Cliente import Client
+from models.Database import Database, installDatabase
 
 app = Flask("ipm-control")
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
+
 Database.createDatabase(app)
+installDatabase(Database.database.db)
+
+from Cliente import Client
 
 @app.route("/")
 def show_index():
