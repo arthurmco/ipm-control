@@ -64,6 +64,13 @@ def logout():
 def show_dashboard():
     return render_template('dashboard.html')
 
+# Client find
+@app.route('/dashboard/client_find')
+def dashboard_client_find():
+    text = request.args.get('client_name')
+    return render_template('dashboard_client_find.html', client=text)
+
+import json
 
 # Client api routes
 @app.route("/api/client/add")
@@ -73,7 +80,7 @@ def add_client():
 
     cli = Client(request.args.get('name'))
     cli.addIntoDatabase()
-    return str(cli.ID)
+    return json.dumps(cli.getObjects())
 
 @app.route("/api/client/<int:clientid>")
 def get_client(clientid):
@@ -82,7 +89,31 @@ def get_client(clientid):
     if cli == False:
         return 'No client'
             
-    return cli.name
+    return json.dumps(cli.getObjects())
+
+
+
+@app.route("/api/client/search/")
+def search_client():
+    if not 'name' in request.args:
+        abort(400)
+
+    name = request.args.get('name')
+    if len(name) < 3:
+        return "[]" # Too short
+
+    json_list = []   
+    clis = Client.getClientFromName(name)
+
+    if clis == False:
+        return "[]" # No clients
+
+    for cli in clis:
+        json_list.append(cli.getObjects())
+
+    return json.dumps(json_list)
+    
+    
 
 @app.route("/api/client/<int:clientid>/remove")
 def remove_client(clientid):

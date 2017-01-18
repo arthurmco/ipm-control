@@ -1,6 +1,7 @@
 """ Dados sobre clientes e hardwares """
 
 from models.Models import db, MClient
+from sqlalchemy import or_
 
 class Client(object):
     """ Define um cliente """
@@ -31,6 +32,10 @@ class Client(object):
         db.session.delete(self._mcli)
         db.session.commit()
         self.ID = False
+
+    def getObjects(self):
+        """ Retrieve a dictionary with safe objects. """
+        return {'id': self.ID, 'name': self.name}
 
     def generateLicenseFile(self):
         """ Generate a license file, based on client ID 
@@ -76,7 +81,7 @@ class Client(object):
         
         for mcli in mclis:
             cli = Client(mcli.client_name)
-            cli.ID = mcli.ID
+            cli.ID = mcli.id
             cli._mcli = mcli
             clis.append(cli)
 
