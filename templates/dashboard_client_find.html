@@ -2,11 +2,9 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>IPM - Painel</title>
-  </head>
+    <title>IPM - Procurar cliente</title>
 
-<!-- TODO: merge these load_clients in a single file -->
- <script type="text/javascript">
+    <script type="text/javascript">
       function load_clients() {
          var clientul = document.getElementById('client_search').getElementsByTagName('ul')[0];
          var clientname = document.getElementById('client_name').value;
@@ -33,25 +31,30 @@ true);
          xhttp.send();
       }
     </script>
-
-  <body>
+    
+  </head>
+  <body onload="load_clients()">
     <header>
       <span id="name">NAME</span> |
       <a href=" {{ url_for('logout') }} ">Logout</a>
     </header>
 
     <article>
-      <h1>Painel</h1>
-      <div id="clients">
-	<h2>Procurar cliente</h2>
-	<form action=" {{ url_for('dashboard_client_find') }} " method="get">
-	  <input type="text" id="client_name" name="client_name"
-		 placeholder="Nome do cliente" onchange="load_clients()"/>
-	  <input type="submit" value="Pesquisar" />
-	</form>
-	<div id="client_search"><ul></ul></div>
-	<a href="#"> Adicionar cliente </a>
+      <h1>Procurar cliente</h1>
+      <form action=" {{ url_for('dashboard_client_find') }} " method="get">
+	<input type="text" id="client_name" name="client_name"
+	       placeholder="Nome do cliente"
+	       value="{{ client }}" />
+	       
+	<input type="submit" value="Pesquisar" />
+      </form>
+
+      <div id="client_search">
+	<ul>
+
+	</ul>
       </div>
+      
     </article>
     
   </body>  
