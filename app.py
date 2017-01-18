@@ -1,10 +1,12 @@
-""" Sistema de controle para a IPM (International Punishment Machines 
+# -*- coding: utf-8 -*-
+
+""" Sistema de controle para a IPM (International Punishment Machines)
 
 	Criado por Arthur Mendes
 
 """
 
-from flask import Flask, url_for, request, abort
+from flask import Flask, url_for, request, redirect, abort, render_template, session
 from models.Database import Database, installDatabase
 
 app = Flask("ipm-control")
@@ -16,10 +18,52 @@ installDatabase(Database.database.db)
 
 from Cliente import Client
 from Hardware import Hardware
+from Employee import Employee
+import hashlib
 
 @app.route("/")
 def show_index():
-    return "index"
+    return render_template("index.html")
+
+# Login route
+@app.route("/login", methods=['GET', 'POST'])
+def do_login():
+    if request.method == 'GET':
+        return redirect(url_for('show_index'))
+
+    if not 'username' in request.form:
+        return redirect(url_for('show_index'))
+
+    # Be careful, the password is unencrypted here
+    # I think I may send the password encrypted, but only if I enforce Javascript?
+    if not 'password' in request.form:
+        return redirect(url_for('show_index'))
+
+    username = request.form.get('username')
+    password = hashlib.sha256(request.form.get('password')).hexdigest()
+
+    emp = Employee.getUserByUsername(username)
+    if emp == False:
+        return redirect(url_for('show_index', err='INVALID_USERNAME'))
+
+    if emp.checkPassword(password) == False:
+        return redirect(url_for('show_index', err='INVALID_PASSWORD'))
+
+    session['userid'] = emp.ID        
+    return redirect(url_for('show_dashboard'))
+
+# Logout route
+@app.route('/logout')
+def logout():
+    session.pop('userid', None)
+    return redirect(url_for('show_index'))
+
+# Dashboard route
+# Here, the employee can search all clients and machines
+@app.route('/dashboard')
+def show_dashboard():
+    return render_template('dashboard.html')
+
 
 # Client api routes
 @app.route("/api/client/add")
@@ -31,7 +75,7 @@ def add_client():
     cli.addIntoDatabase()
     return str(cli.ID)
 
-@app.route("/api/client/get/<int:clientid>")
+@app.route("/api/client/<int:clientid>")
 def get_client(clientid):
     cli = Client.getClientFromID(clientid)
 
@@ -40,7 +84,7 @@ def get_client(clientid):
             
     return cli.name
 
-@app.route("/api/client/remove/<int:clientid>")
+@app.route("/api/client/<int:clientid>/remove")
 def remove_client(clientid):
     cli = Client.getClientFromID(clientid)
 
@@ -50,7 +94,7 @@ def remove_client(clientid):
     cli.removeFromDatabase()
     return "Client %s removed successfully" % cli.name
 
-@app.route("/api/client/update/<int:clientid>/")
+@app.route("/api/client/<int:clientid>/update/")
 def update_client(clientid):
     cli = Client.getClientFromID(clientid)
 
@@ -64,7 +108,7 @@ def update_client(clientid):
     cli.updateIntoDatabase()
     return "Client {} is now {}".format(str(clientid), cli.name)
 
-
+# Hardware api routes
 @app.route("/api/client/<int:client_id>/hardware/add/")
 def add_hardware(client_id):
     if not 'name' in request.args:
@@ -118,6 +162,6 @@ def update_hardware(hwid):
     
     
 
-
+app.secret_key = 'GALLIFREYFALLSNOMORE'
 
 app.run()

@@ -1,4 +1,4 @@
-""" Informações dos funcionários, para login remoto """
+""" Informacoes dos funcionarios, para login remoto """
 from models.Models import db, MEmployee, MEmployeeTime
 
 class Employee(object):
@@ -42,6 +42,9 @@ class Employee(object):
     @staticmethod
     def getUserByUsername(username):
         muser = MEmployee.query.filter_by(employee_login=username).first()
+
+        if muser is None:
+            return False
 
         memp = Employee(muser.employee_login, muser.employee_pwd_hash)
         return memp
