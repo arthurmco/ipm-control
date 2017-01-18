@@ -62,6 +62,8 @@ def update_client(clientid):
     cli.name = request.args.get('name')
     cli.updateIntoDatabase()
     return "Client {} is now {}".format(str(clientid), cli.name)
-    
+
+
+
 
 app.run()

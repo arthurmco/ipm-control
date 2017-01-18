@@ -13,8 +13,8 @@ class Client(object):
         """ Adds into database. Returns client ID """
         self._mcli = MClient(self.name, self.name, '', '')
         db.session.add(self._mcli)
-        self.ID = self._mcli.id
         db.session.commit()
+        self.ID = self._mcli.id
         return self.ID
 
     def updateIntoDatabase(self):
@@ -69,7 +69,7 @@ class Client(object):
         else:
             mclis = MClient.query.filter(or_(MClient.client_name.startswith(cliname),MClient.client_name.endswith(cliname)))
 
-        if mclis is Nome:
+        if mclis is None:
             return False
 
         clis = []

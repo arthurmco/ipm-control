@@ -82,6 +82,3 @@ class MEmployeeTime(db.Model):
 
     def __repr__(self):
         return '<Employee Time %r (%r %r)>' % self.employee_id, self.employee_time_login, self.employee_time_logout
-
-    
-
