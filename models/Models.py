@@ -57,8 +57,8 @@ class MEmployee(db.Model):
         self.employee_pwd_hash = pwd_hash
         self.employee_admission = admission
         if demission is None:
-            demission = datetime.strptime('Dec 1 9999  9:99PM',
-                                          '%b %d %Y %I:%M%p')
+            demission = datetime.strptime('Dec 01 9999 23:59',
+                                          '%b %d %Y %H:%M')
 
         self.employee_demission = demission
 

@@ -159,9 +159,15 @@ def update_hardware(hwid):
         hw.desc = desc
 
     hw.updateIntoDatabase()
-    
-    
 
+
+try:
+    e = Employee('tester', hashlib.sha256('tester').hexdigest())
+    e.insertIntoDatabase()
+except:
+    print('>>> User already into database')
+
+    
 app.secret_key = 'GALLIFREYFALLSNOMORE'
 
 app.run()
