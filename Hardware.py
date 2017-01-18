@@ -44,7 +44,7 @@ class Hardware(object):
 
         hw = Hardware(Client.getClientFromID(mcli.client_id),
                       mcli.hw_name, mcli.hw_desc)
-        hw.ID = mcli.ID
+        hw.ID = mcli.id
         hw._mcli = mcli
         return hw
 
@@ -53,7 +53,7 @@ class Hardware(object):
         """ Returns hardware by name.
         If match=False, then it will return every hardware that has 'hw_name' into name
         If match=True, only exact matches will be returned """
-         if match == True:
+        if match == True:
             mclis = MHardware.query.filter_by(hw_name=hw_name)
         else:
             mclis = MHardware.query.filter(or_(MHardware.hw_name.startswith(hw_name),MHardware.hw_name.endswith(hw_name)))

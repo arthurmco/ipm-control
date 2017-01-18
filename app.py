@@ -15,6 +15,7 @@ Database.createDatabase(app)
 installDatabase(Database.database.db)
 
 from Cliente import Client
+from Hardware import Hardware
 
 @app.route("/")
 def show_index():
@@ -63,6 +64,59 @@ def update_client(clientid):
     cli.updateIntoDatabase()
     return "Client {} is now {}".format(str(clientid), cli.name)
 
+
+@app.route("/api/client/<int:client_id>/hardware/add/")
+def add_hardware(client_id):
+    if not 'name' in request.args:
+        abort(400)
+
+    cli = Client.getClientFromID(client_id)
+    if cli == False:
+        return "No client"
+
+    name = request.args.get('name')
+    desc = request.args.get('desc')
+        
+    hw = Hardware(cli, name, desc)
+    hw.addIntoDatabase()
+    return str(hw.ID)
+
+@app.route("/api/hardware/<int:hwid>/")
+def get_hardware(hwid):
+    hw = Hardware.getHardwareByID(hwid)
+
+    if hw == False:
+        return "No hardware"
+
+    return hw.name
+
+@app.route("/api/hardware/<int:hwid>/remove/")
+def remove_hardware(hwid):
+    hw = Hardware.getHardwareByID(hwid)
+
+    if hw == False:
+        return "No hardware"
+
+    hw.removeFromDatabase()
+
+@app.route("/api/hardware/<int:hwid>/update")
+def update_hardware(hwid):
+    hw = Hardware.getHardwareByID(hwid)
+
+    if hw == False:
+        return "No hardware"
+
+    name = request.args.get('name')
+    desc = request.args.get('desc')
+    if not name is None:
+        hw.name = name
+
+    if not desc is None:
+        hw.desc = desc
+
+    hw.updateIntoDatabase()
+    
+    
 
 
 
