@@ -24,6 +24,13 @@ import hashlib
 
 Client.LicenseFolder = app.config['IPM_LICENSE_FOLDER']
 
+def check_if_logged():
+    if not 'userid' in session:
+        return False
+
+    return True
+
+
 @app.route("/")
 def show_index():
     return render_template("index.html")
@@ -65,22 +72,34 @@ def logout():
 # Here, the employee can search all clients and machines
 @app.route('/dashboard')
 def show_dashboard():
+    if check_if_logged() == False:
+        return redirect(url_for('show_index'))
+    
     return render_template('dashboard.html')
 
 # Client add
 @app.route('/dashboard/client/add')
 def dashboard_client_add():
+    if check_if_logged() == False:
+        return redirect(url_for('show_index'))
+    
     return render_template('dashboard_client_add.html')
 
 # Client find
 @app.route('/dashboard/client/find')
 def dashboard_client_find():
+    if check_if_logged() == False:
+        return redirect(url_for('show_index'))
+    
     text = request.args.get('client_name')
     return render_template('dashboard_client_find.html', client=text)
 
 # Client get
 @app.route('/dashboard/client/<int:clientid>/')
 def dashboard_client_get(clientid):
+    if check_if_logged() == False:
+        return redirect(url_for('show_index'))
+    
     # Do not load the client now, let the javascript code load it
     return render_template('dashboard_client.html', client_id=clientid)
 
@@ -90,6 +109,10 @@ import json
 # Client api routes
 @app.route("/api/client/add")
 def add_client():
+
+    if check_if_logged() == False:
+        abort(403)    
+    
     if not 'name' in request.args:
         abort(400)
 
@@ -99,6 +122,10 @@ def add_client():
 
 @app.route("/api/client/<int:clientid>")
 def get_client(clientid):
+    
+    if check_if_logged() == False:
+        abort(403)    
+    
     cli = Client.getClientFromID(clientid)
 
     if cli == False:
@@ -106,10 +133,11 @@ def get_client(clientid):
             
     return json.dumps(cli.getObjects())
 
-
-
 @app.route("/api/client/search/")
-def search_client():
+def search_client():    
+    if check_if_logged() == False:
+        abort(403)    
+    
     if not 'name' in request.args:
         abort(400)
 
@@ -132,6 +160,9 @@ def search_client():
 
 @app.route("/api/client/<int:clientid>/remove")
 def remove_client(clientid):
+    if check_if_logged() == False:
+        abort(403)    
+
     cli = Client.getClientFromID(clientid)
 
     if cli == False:
@@ -142,6 +173,9 @@ def remove_client(clientid):
 
 @app.route("/api/client/<int:clientid>/update/")
 def update_client(clientid):
+    if check_if_logged() == False:
+        abort(403)    
+
     cli = Client.getClientFromID(clientid)
 
     if cli == False:
@@ -156,6 +190,9 @@ def update_client(clientid):
 
 @app.route("/api/client/<int:clientid>/license_file")
 def get_license_file(clientid):
+    if check_if_logged() == False:
+        abort(403)    
+
     cli = Client.getClientFromID(clientid)
 
     if cli == False:
@@ -167,7 +204,6 @@ def get_license_file(clientid):
         abort(404)
 
     return cfile, 200, {'Content-Type': 'application/x-ipm-license'}
-
     
 
 # Hardware api routes
