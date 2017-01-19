@@ -10,6 +10,7 @@
   </head>
   <body onload="load_client( {{ client_id  }}  )">
     <header>
+      <a href=" {{ url_for('show_dashboard') }} ">Back to Dashboard</a>
       <span id="name">NAME</span> |
       <a href=" {{ url_for('logout') }} ">Logout</a>
     </header>
@@ -18,7 +19,7 @@
       <h1>Dados do cliente</h1>
       <p>Nome: <span id="client_name"></span></p>
       <hr />
-      <p><a href="#"> Baixar arquivo de licença </a></p>
+      <p><a href=" {{ url_for('get_license_file',clientid=client_id) }}  "> Baixar arquivo de licença </a></p>
       
     </article>
     

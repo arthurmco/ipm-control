@@ -12,6 +12,7 @@ from models.Database import Database, installDatabase
 app = Flask("ipm-control")
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
+app.config['IPM_LICENSE_FOLDER'] = '/tmp/licenses'
 
 Database.createDatabase(app)
 installDatabase(Database.database.db)
@@ -20,6 +21,8 @@ from Cliente import Client
 from Hardware import Hardware
 from Employee import Employee
 import hashlib
+
+Client.LicenseFolder = app.config['IPM_LICENSE_FOLDER']
 
 @app.route("/")
 def show_index():
@@ -99,7 +102,7 @@ def get_client(clientid):
     cli = Client.getClientFromID(clientid)
 
     if cli == False:
-        return 'No client'
+        return '{}'
             
     return json.dumps(cli.getObjects())
 
@@ -132,7 +135,7 @@ def remove_client(clientid):
     cli = Client.getClientFromID(clientid)
 
     if cli == False:
-        return 'No client'
+        return '{}'
 
     cli.removeFromDatabase()
     return "Client %s removed successfully" % cli.name
@@ -142,7 +145,7 @@ def update_client(clientid):
     cli = Client.getClientFromID(clientid)
 
     if cli == False:
-        return 'No client'
+        return '{}'
 
     if not 'name' in request.args:
         abort(400)
@@ -150,6 +153,22 @@ def update_client(clientid):
     cli.name = request.args.get('name')
     cli.updateIntoDatabase()
     return "Client {} is now {}".format(str(clientid), cli.name)
+
+@app.route("/api/client/<int:clientid>/license_file")
+def get_license_file(clientid):
+    cli = Client.getClientFromID(clientid)
+
+    if cli == False:
+        abort(404)
+
+    cfile = cli.readLicenseFile()
+
+    if cfile == False:
+        abort(404)
+
+    return cfile, 200, {'Content-Type': 'application/x-ipm-license'}
+
+    
 
 # Hardware api routes
 @app.route("/api/client/<int:client_id>/hardware/add/")

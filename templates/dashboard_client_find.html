@@ -10,6 +10,7 @@
   </head>
   <body onload="load_clients()">
     <header>
+      <a href=" {{ url_for('show_dashboard') }} ">Back to Dashboard</a>
       <span id="name">NAME</span> |
       <a href=" {{ url_for('logout') }} ">Logout</a>
     </header>

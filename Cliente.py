@@ -1,18 +1,33 @@
+# -*- coding: utf-8 -*-
 """ Dados sobre clientes e hardwares """
 
 from models.Models import db, MClient
 from sqlalchemy import or_
-
+import hashlib
+import os
+    
 class Client(object):
+    LicenseFolder = "/tmp"
+    
     """ Define um cliente """
     def __init__(self, name):
         self.ID = False
         self.name = name
+        
+        # Make filename the sha256 hash of the name
+        # You can change it dynamically, though.
+        # The filename isn't truly dependent of the client name
+
+        self.license_filename = hashlib.sha256(self.name.encode('utf-8')).hexdigest()
+                      
         self._mcli = None
 
     def addIntoDatabase(self):
         """ Adds into database. Returns client ID """
-        self._mcli = MClient(self.name, self.name, '', '')
+        self._mcli = MClient(self.name, self.license_filename, '', '')
+        if self.readLicenseFile() == False:
+            self.generateLicenseFile()
+        
         db.session.add(self._mcli)
         db.session.commit()
         self.ID = self._mcli.id
@@ -23,7 +38,7 @@ class Client(object):
             return self.addIntoDatabase()
 
         self._mcli.client_name = self.name
-        self._mcli.client_license_file = self.name + " license"
+        self._mcli.client_license_file = self.license_filename
         db.session.add(self._mcli)
         db.session.commit()        
 
@@ -37,11 +52,32 @@ class Client(object):
         """ Retrieve a dictionary with safe objects. """
         return {'id': self.ID, 'name': self.name}
 
+    def readLicenseFile(self):
+        """ Read the license file. Return its content, or False if it
+        doesn't exist """
+        license_path = os.path.join(Client.LicenseFolder, self.license_filename)
+
+        try:
+            license_file = open(license_path, 'r')
+        except IOError:
+            return False
+
+        license_content = license_file.read()
+        license_file.close()
+        return license_content
+    
     def generateLicenseFile(self):
         """ Generate a license file, based on client ID 
         Fills the 'license_file' attribute with its path
         """
-        pass
+        license_path = os.path.join(Client.LicenseFolder, self.license_filename)
+        license_file = open(license_path, 'w')
+
+        # Store a hash of the client ID.
+        license_content = hashlib.sha256(str(self.ID)).hexdigest()
+        license_file.write(license_content)
+        license_file.close()
+        
 
     def generateLicenseKey(self):
         """ Generate the license private and public keys 
@@ -60,6 +96,7 @@ class Client(object):
 
         cli = Client(mcli.client_name)
         cli.ID = mcli.id
+        cli.license_filename = mcli.client_license_file
         cli._mcli = mcli
         return cli
 
@@ -82,6 +119,7 @@ class Client(object):
         for mcli in mclis:
             cli = Client(mcli.client_name)
             cli.ID = mcli.id
+            cli.license_filename = mcli.client_license_file
             cli._mcli = mcli
             clis.append(cli)
 
