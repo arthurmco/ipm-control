@@ -99,6 +99,18 @@ function add_client() {
     xhttp.send();
 }
 
+function remove_client(client_id) {
+     var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+	if (this.readyState == 4 && this.status == 200) {
+	    window.location = "/dashboard";
+	}
+    };
+    
+    xhttp.open("GET", "/api/client/" + client_id + "/remove", true);
+    xhttp.send();
+}
+
 
 function load_hardwares(clientID) {
     var hardwareul = document.getElementById('hardware_search').getElementsByTagName('ul')[0];

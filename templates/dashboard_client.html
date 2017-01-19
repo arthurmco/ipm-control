@@ -12,6 +12,8 @@
   <p><input type="text" id="hw_name" placeholder="Nome do Hardware" /></p>
 </div>
 <a href="#" onClick="__add_hardware({{ client_id }})">Adicionar Hardware</a>
+<hr />
+<a href="#" onClick="remove_client({{ client_id}})">Remover Cliente</a>
 
 <script>
   var add_now = false;
@@ -23,7 +25,10 @@
      } else {
         add_now = false;
         hwadd.style.display = 'none';
-        add_hardware({{ client_id }});
+
+        if (document.getElementById("hw_name").value != "") {
+            add_hardware({{ client_id }});
+        }
      }
   
   }
