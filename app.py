@@ -265,7 +265,9 @@ try:
 except:
     print('>>> User already into database')
 
+Database.database.db.session.rollback()
     
 app.secret_key = 'GALLIFREYFALLSNOMORE'
 
-app.run()
+if __name__ == '__main__':
+    app.run()
