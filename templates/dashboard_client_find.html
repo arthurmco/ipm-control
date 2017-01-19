@@ -1,37 +1,19 @@
-<!DOCTYPE html5>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <title>IPM - Procurar cliente</title>
+{% extends "base.html" %}
+{% block body_ev %}onload="load_clients()"{% endblock %}
+{% block main %}
+<h1>Procurar cliente</h1>
+<form action=" {{ url_for('dashboard_client_find') }} " method="get">
+  <input type="text" id="client_name" name="client_name"
+	 placeholder="Nome do cliente"
+	 value="{{ client }}" />
+  
+  <input type="submit" value="Pesquisar"  />
+</form>
 
-    <script type="text/javascript" src="{{ url_for('static', filename='utils.js') }}">
-    </script>
+<div id="client_search">
+  <ul>
     
-  </head>
-  <body onload="load_clients()">
-    <header>
-      <a href=" {{ url_for('show_dashboard') }} ">Back to Dashboard</a>
-      <span id="name">NAME</span> |
-      <a href=" {{ url_for('logout') }} ">Logout</a>
-    </header>
-
-    <article>
-      <h1>Procurar cliente</h1>
-      <form action=" {{ url_for('dashboard_client_find') }} " method="get">
-	<input type="text" id="client_name" name="client_name"
-	       placeholder="Nome do cliente"
-	       value="{{ client }}" />
-	       
-	<input type="submit" value="Pesquisar" />
-      </form>
-
-      <div id="client_search">
-	<ul>
-
-	</ul>
-      </div>
-      
-    </article>
-    
-  </body>  
-</html>
+  </ul>
+</div>
+{% endblock %}
+  

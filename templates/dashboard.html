@@ -1,32 +1,14 @@
-<!DOCTYPE html5>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <title>IPM - Painel</title>
-  </head>
-
-<!-- TODO: merge these load_clients in a single file -->
- <script type="text/javascript" src="{{ url_for('static', filename='utils.js') }}"></script>
-
-  <body>
-    <header>
-      <span id="name">NAME</span> |
-      <a href=" {{ url_for('logout') }} ">Logout</a>
-    </header>
-
-    <article>
-      <h1>Painel</h1>
-      <div id="clients">
-	<h2>Procurar cliente</h2>
-	<form action=" {{ url_for('dashboard_client_find') }} " method="get">
-	  <input type="text" id="client_name" name="client_name"
-		 placeholder="Nome do cliente" onchange="load_clients()"/>
-	  <input type="submit" value="Pesquisar" />
-	</form>
-	<div id="client_search"><ul></ul></div>
-	<a href=" {{ url_for('dashboard_client_add') }}"> Adicionar cliente </a>
-      </div>
-    </article>
-    
-  </body>  
-</html>
+{% extends "base.html" %}
+{% block main %}
+<h1>Painel</h1>
+<div id="clients">
+  <h2>Procurar cliente</h2>
+  <form onload="load_clients()" action=" {{ url_for('dashboard_client_find') }} " method="get">
+    <input type="text" id="client_name" name="client_name"
+	   placeholder="Nome do cliente" onchange="load_clients()"/>
+    <input type="submit" value="Pesquisar" />
+  </form>
+  <div id="client_search"><ul></ul></div>
+  <a href=" {{ url_for('dashboard_client_add') }}"> Adicionar cliente </a>
+</div>
+{% endblock %}    
