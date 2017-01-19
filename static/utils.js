@@ -11,8 +11,9 @@ function load_clients(){
 	if (this.readyState == 4 && this.status == 200) {
 	    clients = JSON.parse(this.responseText);
 	    console.log(clients)
-	    
-	    clientul.innerHTML = "";
+
+	    if (clients.length == 0 )
+		clientul.innerHTML = "<li>Nenhum cliente encontrado.</li>";
 	    
 	    for(var i = 0; i < clients.length; i++) {
 		var li = document.createElement("li");
@@ -28,6 +29,8 @@ function load_clients(){
 		clientul.appendChild(li);
 	    }
 	    
+	} else if (this.readyState == 4 && this.status == 404) {
+	    clientul.innerHTML = "<li>Nenhum cliente encontrado.</li>";
 	}
     };
     

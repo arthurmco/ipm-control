@@ -135,7 +135,7 @@ def get_client(clientid):
     cli = Client.getClientFromID(clientid)
 
     if cli == False:
-        return '{}'
+        return "{}";
             
     return json.dumps(cli.getObjects())
 
@@ -286,4 +286,4 @@ Database.database.db.session.rollback()
 app.secret_key = 'GALLIFREYFALLSNOMORE'
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0')
