@@ -24,8 +24,8 @@ class Hardware(object):
             return self.addIntoDatabase()
 
         self._mcli.client_id = self.client.ID
-        self._mcli.hw_name = self.hw_name
-        self._mcli.hw_desc = self.hw_desc
+        self._mcli.hw_name = self.name
+        self._mcli.hw_desc = self.desc
         db.session.add(self._mcli)
         db.session.commit()
     
@@ -34,6 +34,10 @@ class Hardware(object):
         db.session.delete(self._mcli)
         db.session.commit()
         self.ID = False
+
+    def getObjects(self):
+        return {'id': self.ID, 'client_id': self.client.ID,
+                'name': self.name, 'desc': self.desc}
 
     @staticmethod
     def getHardwareByID(hw_id):
@@ -85,7 +89,7 @@ class Hardware(object):
         for mcli in mclis:
             hw = Hardware(Client.getClientFromID(mcli.client_id),
                           mcli.hw_name, mcli.hw_desc)
-            hw.ID = mcli.ID
+            hw.ID = mcli.id
             hw._mcli = mcli
             clis.append(hw)
 

@@ -95,6 +95,61 @@ function add_client() {
 	}
     };
     
-    xhttp.open("GET", "/api/client/add?name=" + clientname, true);
+    xhttp.open("GET", "/api/client/add?name=" + clientname + "&d=" + Date.now(), true);
     xhttp.send();
 }
+
+
+function load_hardwares(clientID) {
+    var hardwareul = document.getElementById('hardware_search').getElementsByTagName('ul')[0];
+    hardwareul.innerHTML = "";
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+	if (this.readyState == 4 && this.status == 200) {
+	    hws = JSON.parse(this.responseText);
+	    console.log(hws)
+
+	    if (hws.length == 0 )
+		hardwareul.innerHTML = "<li>Nenhum hardware encontrado.</li>";
+	    
+	    for(var i = 0; i < hws.length; i++) {
+		var li = document.createElement("li");
+
+		var text_link = hws[i].name
+		
+		var li_text = document.createTextNode("");
+		li.appendChild(li_text);
+		li.innerHTML = text_link;
+		hardwareul.appendChild(li);
+	    }
+	    
+	} else if (this.readyState == 4 && this.status == 404) {
+	    hardwareul.innerHTML = "<li>Nenhum hardware encontrado.</li>";
+	}
+    };
+    
+    xhttp.open("GET", "/api/client/"+clientID+"/hardware/", true);
+    xhttp.send();
+}
+
+
+function add_hardware(clientID) {
+    var name = document.getElementById("hw_name").value;
+
+     
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+	if (this.readyState == 4 && this.status == 200) {
+	    console.log(":D");
+	    
+	} else if (this.readyState == 4 && this.status >= 400) {
+	    print_client_status('ERROR', status, "Algo de errado ocorreu no servidor");
+	}
+    };
+    
+    xhttp.open("GET", "/api/client/" + clientID + "/hardware/add/?name=" + name, true);
+    xhttp.send();
+    
+    load_hardwares(clientID);
+}
+

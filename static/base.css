@@ -18,3 +18,7 @@ article {
     width: 100%;
     
 }
+
+#client_search ul, #hardware_search ul {
+    list-style-type: none
+}

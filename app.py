@@ -213,8 +213,31 @@ def get_license_file(clientid):
 
 
 # Hardware api routes
+@app.route("/api/client/<int:client_id>/hardware/")
+def get_hardware_by_client(client_id):
+    if check_if_logged() == False:
+        abort(403)    
+    
+    cli = Client.getClientFromID(client_id)
+    if cli == False:
+        return "[]"
+
+    hws = Hardware.getHardwaresByClient(cli)
+    if hws == False:
+        return "[]"
+
+    hw_list = []
+    for hw in hws:
+        hw_list.append(hw.getObjects())
+    
+    return json.dumps(hw_list)
+
+
 @app.route("/api/client/<int:client_id>/hardware/add/")
 def add_hardware(client_id):
+    if check_if_logged() == False:
+        abort(403)    
+    
     if not 'name' in request.args:
         abort(400)
 
@@ -231,6 +254,9 @@ def add_hardware(client_id):
 
 @app.route("/api/hardware/<int:hwid>/")
 def get_hardware(hwid):
+    if check_if_logged() == False:
+        abort(403)
+        
     hw = Hardware.getHardwareByID(hwid)
 
     if hw == False:
@@ -240,6 +266,9 @@ def get_hardware(hwid):
 
 @app.route("/api/hardware/<int:hwid>/remove/")
 def remove_hardware(hwid):
+    if check_if_logged() == False:
+        abort(403)
+    
     hw = Hardware.getHardwareByID(hwid)
 
     if hw == False:
@@ -249,6 +278,9 @@ def remove_hardware(hwid):
 
 @app.route("/api/hardware/<int:hwid>/update")
 def update_hardware(hwid):
+    if check_if_logged() == False:
+        abort(403)
+        
     hw = Hardware.getHardwareByID(hwid)
 
     if hw == False:
@@ -267,6 +299,9 @@ def update_hardware(hwid):
 # Show employee's time logging information
 @app.route("/api/employee/<int:employeeid>/log")
 def show_employee_time_log(employeeid):
+    if check_if_logged() == False:
+        abort(403)
+        
     emp = Employee.getUserByID(employeeid)
 
     if emp == False:

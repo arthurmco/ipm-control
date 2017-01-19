@@ -1,8 +1,33 @@
 {% extends "base.html" %}
+{% block body_ev %}onload="load_client({{ client_id }}); load_hardwares({{ client_id }})"{% endblock %}
 {% block main %}
-      <h1>Dados do cliente</h1>
-      <p>Nome: <span id="client_name"></span></p>
-      <hr />
-      <p><a href=" {{ url_for('get_license_file',clientid=client_id) }}  "> Baixar arquivo de licença </a></p>
+<h1>Dados do cliente</h1>
+<p>Nome: <span id="client_name"></span></p>
+<p><a href=" {{ url_for('get_license_file',clientid=client_id) }}  "> Baixar arquivo de licença </a></p>
+
+<hr />
+<h2>Hardwares</h2>
+<div id="hardware_search"><ul></ul></div>
+<div id="hardware_add" style="display: none">
+  <p><input type="text" id="hw_name" placeholder="Nome do Hardware" /></p>
+</div>
+<a href="#" onClick="__add_hardware({{ client_id }})">Adicionar Hardware</a>
+
+<script>
+  var add_now = false;
+  function __add_hardware(client_id) {
+     var hwadd = document.getElementById("hardware_add");
+     if (!add_now) {
+        add_now = true;
+        hwadd.style.display = 'block';
+     } else {
+        add_now = false;
+        hwadd.style.display = 'none';
+        add_hardware({{ client_id }});
+     }
+  
+  }
+  
+</script>
 
 {% endblock %}
