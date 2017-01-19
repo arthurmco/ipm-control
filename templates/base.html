@@ -13,7 +13,7 @@
   <body {% block body_ev %}{% endblock %}>
     <header>
       <p><a href=" {{ url_for('show_dashboard') }} ">Voltar ao Painel</a></p>
-      <p><span id="name">NAME</span></p>
+      <p><span id="name">{{ session['username'] }}</span></p>
       <p><a href=" {{ url_for('logout') }} ">Logout</a></p>
     </header>
 

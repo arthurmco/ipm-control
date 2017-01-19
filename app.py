@@ -60,6 +60,7 @@ def do_login():
     if emp.checkPassword(password) == False:
         return redirect(url_for('show_index', err='INVALID_PASSWORD'))
 
+    session['username'] = emp.username
     session['userid'] = emp.ID
     session['login_time'] = datetime.datetime.now()
     return redirect(url_for('show_dashboard'))
@@ -70,7 +71,8 @@ def logout():
     # Register logout
     emp = Employee.getUserByID(session['userid'])
     emp.registerEmployeeTime(session['login_time'], datetime.datetime.now())    
-    
+
+    session.pop('username')
     session.pop('userid', None)
     return redirect(url_for('show_index'))
 
