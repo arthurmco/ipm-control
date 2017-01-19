@@ -77,6 +77,7 @@ class Client(object):
         license_content = hashlib.sha256(str(self.ID)).hexdigest()
         license_file.write(license_content)
         license_file.close()
+        return license_content
         
 
     def generateLicenseKey(self):

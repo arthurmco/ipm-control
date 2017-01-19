@@ -208,7 +208,7 @@ def get_license_file(clientid):
     cfile = cli.readLicenseFile()
 
     if cfile == False:
-        abort(404)
+        cfile = cli.generateLicenseFile()
 
     return cfile, 200, {'Content-Type': 'application/x-ipm-license'}
 
