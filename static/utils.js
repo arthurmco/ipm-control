@@ -16,8 +16,15 @@ function load_clients(){
 	    
 	    for(var i = 0; i < clients.length; i++) {
 		var li = document.createElement("li");
-		var li_text = document.createTextNode(clients[i].name);
+
+		var text_link = "<a href='/dashboard/client/" +
+		    clients[i].id + "'>" + clients[i].name + "</a>";
+		var license_link = "<a href='/api/client/" + clients[i].id +
+		    "/license_file'>Baixar arquivo de licença</a>";
+		
+		var li_text = document.createTextNode("");
 		li.appendChild(li_text);
+		li.innerHTML = text_link + " | " + license_link;
 		clientul.appendChild(li);
 	    }
 	    
