@@ -64,11 +64,23 @@ def logout():
 def show_dashboard():
     return render_template('dashboard.html')
 
+# Client add
+@app.route('/dashboard/client/add')
+def dashboard_client_add():
+    return render_template('dashboard_client_add.html')
+
 # Client find
-@app.route('/dashboard/client_find')
+@app.route('/dashboard/client/find')
 def dashboard_client_find():
     text = request.args.get('client_name')
     return render_template('dashboard_client_find.html', client=text)
+
+# Client get
+@app.route('/dashboard/client/<int:clientid>/')
+def dashboard_client_get(clientid):
+    # Do not load the client now, let the javascript code load it
+    return render_template('dashboard_client.html', client_id=clientid)
+
 
 import json
 

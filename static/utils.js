@@ -46,3 +46,45 @@ function load_client(client_id){
     xhttp.open("GET", "/api/client/" + client_id, true);
     xhttp.send();
 }
+
+function print_client_status(type, el, message) {
+    if (type === 'ERROR') {
+	el.style.color = "red";
+    } else if (type === 'SUCCESS') {
+	el.style.color = "green";
+    }
+
+    el.innerHTML = message;
+}
+
+
+function add_client() {
+    
+    var status = document.getElementById("client_status");
+    var clientname = document.getElementById("cli_name").value;
+    
+    if (clientname == "") {
+	print_client_status('ERROR', status, "Digite o nome do cliente");
+	return;
+    }
+    
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+	if (this.readyState == 4 && this.status == 200) {
+	    client = JSON.parse(this.responseText);
+	    console.log(client)
+
+	    if (client.name == clientname) {
+		print_client_status('SUCCESS', status, "Cliente adicionado com sucesso!");
+	    } else {
+		print_client_status('ERROR', status, "Erro: Inconsistência");
+	    }
+	    
+	} else if (this.readyState == 4 && this.status >= 400) {
+	    print_client_status('ERROR', status, "Algo de errado ocorreu no servidor");
+	}
+    };
+    
+    xhttp.open("GET", "/api/client/add?name=" + clientname, true);
+    xhttp.send();
+}
