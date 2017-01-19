@@ -21,6 +21,7 @@ from Cliente import Client
 from Hardware import Hardware
 from Employee import Employee
 import hashlib
+import datetime
 
 Client.LicenseFolder = app.config['IPM_LICENSE_FOLDER']
 
@@ -59,12 +60,17 @@ def do_login():
     if emp.checkPassword(password) == False:
         return redirect(url_for('show_index', err='INVALID_PASSWORD'))
 
-    session['userid'] = emp.ID        
+    session['userid'] = emp.ID
+    session['login_time'] = datetime.datetime.now()
     return redirect(url_for('show_dashboard'))
 
 # Logout route
 @app.route('/logout')
 def logout():
+    # Register logout
+    emp = Employee.getUserByID(session['userid'])
+    emp.registerEmployeeTime(session['login_time'], datetime.datetime.now())    
+    
     session.pop('userid', None)
     return redirect(url_for('show_index'))
 
@@ -204,7 +210,7 @@ def get_license_file(clientid):
         abort(404)
 
     return cfile, 200, {'Content-Type': 'application/x-ipm-license'}
-    
+
 
 # Hardware api routes
 @app.route("/api/client/<int:client_id>/hardware/add/")
@@ -258,6 +264,16 @@ def update_hardware(hwid):
 
     hw.updateIntoDatabase()
 
+# Show employee's time logging information
+@app.route("/api/employee/<int:employeeid>/log")
+def show_employee_time_log(employeeid):
+    emp = Employee.getUserByID(employeeid)
+
+    if emp == False:
+        return "[]"
+
+    return json.dumps(emp.getEmployeeTime())
+    
 
 try:
     e = Employee('tester', hashlib.sha256('tester').hexdigest())
