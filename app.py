@@ -11,8 +11,7 @@ from models.Database import Database, installDatabase
 
 app = Flask("ipm-control")
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
-app.config['IPM_LICENSE_FOLDER'] = '/tmp/licenses'
+app.config.from_pyfile('config.cfg')
 
 Database.createDatabase(app)
 installDatabase(Database.database.db)
