@@ -1,6 +1,7 @@
 Aplicativo web teste para uma entrevista
 
-!(travis-status)[https://travis-ci.org/arthurmco/ipm-control.svg?branch=master]
+![travis-status](https://travis-ci.org/arthurmco/ipm-control.svg?branch=master)
+
 
 O usuário da interface web é 'tester' e a senha é 'tester'
 
